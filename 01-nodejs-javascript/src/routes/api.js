@@ -1,4 +1,6 @@
 const express = require('express');
+const { createUser } = require('../controllers/userController');
+
 
 const routerAPI = express.Router();
 
@@ -12,6 +14,9 @@ const routerAPI = express.Router();
 // routerAPI.post('/users', postCreateUserAPI);
 // routerAPI.put('/users', putUpdateUserAPI);
 // routerAPI.delete('/users', deleteUserAPI);
+
+routerAPI.post('/register', createUser);
+
 
 
 

@@ -4,9 +4,13 @@ const configViewEngine = require('./config/viewEngine');
 const apiRoutes = require('./routes/api');
 const connection = require('./config/database');
 const { getHomepage } = require('./controllers/homeController');
+var cors = require('cors');
 
 const app = express();
 const port = process.env.PORT || 8888;
+
+//config cors
+app.use(cors());
 
 //config req.body
 app.use(express.json()) // for json
@@ -23,7 +27,7 @@ app.use('/', getHomepage);
 (async () => {
     try {
         //using mongoose
-        // await connection();
+        await connection();
 
         app.listen(port, () => {
             console.log(`Backend Nodejs App listening on port ${port}`)
