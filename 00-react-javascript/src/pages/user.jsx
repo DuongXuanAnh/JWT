@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Table } from "antd"
+import { notification, Table } from "antd"
 import { getUserApi } from '../util/api';
 
 const UserPage = () => {
@@ -9,7 +9,14 @@ const UserPage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const res = await getUserApi();
-      setDataSource(res);
+
+   
+
+      if(res.EC && res.EC !== 0 ){
+        notification.error({message: "Error", description: res.EM});
+      }else{
+        setDataSource(res);
+      }
     }
 
     fetchUserData();
