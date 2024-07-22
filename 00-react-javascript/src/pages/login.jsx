@@ -1,104 +1,106 @@
-import React, { useContext } from 'react';
-import { Button, Checkbox, Form, Input, notification } from 'antd';
-import { loginApi } from '../util/api';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../components/context/auth.context';
+import React, { useContext } from "react";
+import { Button, Col, Divider, Form, Input, notification, Row } from 'antd';
+import { loginApi } from "../util/api";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../components/context/auth.context";
+import { ArrowLeftOutlined } from '@ant-design/icons';
 
 const LoginPage = () => {
-
   const navigate = useNavigate();
 
-  const {setAuth} = useContext(AuthContext);
+  const { setAuth } = useContext(AuthContext);
 
   const onFinish = async (values) => {
+    const { email, password } = values;
 
-    const { email, password} = values;
+    const res = await loginApi(email, password);
 
-    const res = await loginApi( email, password);
-
-    
-    if(res && res.EC === 0){
+    if (res && res.EC === 0) {
       localStorage.setItem("accessToken", res.accessToken);
       notification.success({
-        message: 'Login success',
-        description: 'You have successfully login'
+        message: "Login success",
+        description: "You have successfully login",
       });
 
       setAuth({
         isAuthenticated: true,
         user: {
-            email: res?.user?.email ?? "",
-            name: res?.user?.email ?? "",
-            role: res?.user?.role ?? ""
+          email: res?.user?.email ?? "",
+          name: res?.user?.email ?? "",
+          role: res?.user?.role ?? "",
         },
       });
 
-      navigate('/');
-    }else{
+      navigate("/");
+    } else {
       notification.error({
-        message: 'Login failed',
-        description: res?.EM ?? "error"
+        message: "Login failed",
+        description: res?.EM ?? "error",
       });
     }
 
-    console.log('Success:', res);
+    console.log("Success:", res);
   };
 
   return (
-    <div style={{margin: 50}}>
-       <Form
-    name="basic"
-    labelCol={{
-      span: 8,
-    }}
-    wrapperCol={{
-      span: 16,
-    }}
-    style={{
-      maxWidth: 600,
-    }}
-  
-    onFinish={onFinish}
-    autoComplete="off"
-    layout="vertical"
-  >
-    <Form.Item
-      label="Email"
-      name="email"
-      rules={[
-        {
-          required: true,
-          message: 'Please input your email!',
-        },
-      ]}
-    >
-      <Input />
-    </Form.Item>
-    
+    <Row justify={"center"} style={{ marginTop: "30px" }}>
+      <Col xs={24} md={16} lg={8}>
+        <fieldset
+          style={{
+            padding: "15px",
+            margin: "5px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+          }}
+        >
+          <legend>Login</legend>
+          <Form
+            name="basic"
+            onFinish={onFinish}
+            autoComplete="off"
+            layout="vertical"
+          >
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your email!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your password!",
+                },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Login
+              </Button>
+            </Form.Item>
+          </Form>
+          <Link to={"/"}>
+            <ArrowLeftOutlined /> Back to Home
+          </Link>
+          <Divider />
+          <div style={{ textAlign: "center" }}>
+            Not have account yet? <Link to={"/register"}>Register Now</Link>
+          </div>
+        </fieldset>
+      </Col>
+    </Row>
+  );
+};
 
-    <Form.Item
-      label="Password"
-      name="password"
-      rules={[
-        {
-          required: true,
-          message: 'Please input your password!',
-        },
-      ]}
-    >
-      <Input.Password />
-
-    </Form.Item>
-
-    <Form.Item>
-      <Button type="primary" htmlType="submit">
-        Login
-      </Button>
-    </Form.Item>
-  </Form>
-    </div>
-   
-  )
-}
-
-export default LoginPage
+export default LoginPage;

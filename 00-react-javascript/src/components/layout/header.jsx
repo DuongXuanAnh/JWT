@@ -1,8 +1,10 @@
 import React, { useContext, useState } from "react";
 import {
   AppstoreOutlined,
+  HomeOutlined,
   MailOutlined,
   SettingOutlined,
+  UsergroupAddOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { Link, useNavigate } from "react-router-dom";
@@ -19,7 +21,7 @@ const Header = () => {
     {
       label: <Link to={"/"}>Home Page</Link>,
       key: "home",
-      icon: <MailOutlined />,
+      icon: <HomeOutlined />,
     },
 
     ...(
@@ -27,7 +29,7 @@ const Header = () => {
         {
           label: <Link to={"/user"}>Users</Link>,
           key: "users",
-          icon: <MailOutlined />,
+          icon: <UsergroupAddOutlined />,
         }
       ] : []
     ),
